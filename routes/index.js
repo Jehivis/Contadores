@@ -198,4 +198,38 @@ router.get("/dataGroup", async(req, res) => {
     return res.status(200).json({"Message":"Datos Ingresados"});
 });
 
+router.get("/dataCounterStore/:dateInit/:store", async(req, res) => {
+    const { dateInit, store } = req.params;
+    if(moment(dateInit, 'YYYY-MM-DD',true).isValid()){
+        console.log(`${dateInit}T18:20:59.000+00:00`);
+    let showDataCounter = await CounterUnion.find({ 
+            date: new Date(`${dateInit}T18:20:59.000+00:00`),
+            store: store
+        },{in: 1, out: 1, store: 1 })
+    const counterPush = [];
+
+    showDataCounter.map(counters => {
+
+        const showCounter = {
+            fecha: "",
+            entrada: "",
+            salida: 0
+        };
+
+        showCounter.entrada = counters.in;
+        showCounter.salida = counters.out;
+        showCounter.fecha = counters.date;
+
+        counterPush.push(showCounter);
+    });
+
+    console.log(counterPush.length);
+    return res.status(200).json(counterPush);
+
+   
+    }else{
+        return res.status(400).json({ message: "Error, fechas en formato incorrecto" });
+    }
+});
+
 module.exports = router;
