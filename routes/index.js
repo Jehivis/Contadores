@@ -200,12 +200,21 @@ router.get("/dataGroup", async(req, res) => {
 
 router.get("/dataCounterStore/:dateInit/:store", async(req, res) => {
     const { dateInit, store } = req.params;
+    let namea  = store.replace('á','a');
+    let namee  = namea.replace('é','e');
+    let namei  = namee.replace('í','i');
+    let nameo  = namei.replace('ó','o');
+    let nameu  = nameo.replace('ú','u');
+    console.log(nameu);
     if(moment(dateInit, 'YYYY-MM-DD',true).isValid()){
-        console.log(`${dateInit}T18:20:59.000+00:00`);
+        
+    console.log(`${dateInit}T18:20:59.000+00:00`);
+    
     let showDataCounter = await CounterUnion.find({ 
             date: new Date(`${dateInit}T18:20:59.000+00:00`),
-            store: store
-        },{in: 1, out: 1, store: 1 })
+            store: nameu
+        },{in: 1, out: 1, store: 1 });
+
     const counterPush = [];
 
     showDataCounter.map(counters => {
